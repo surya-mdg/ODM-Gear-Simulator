@@ -5,14 +5,18 @@ using UnityEngine;
 public class NpcMovement : MonoBehaviour
 {
     public Transform[] Waypoints; //List of all the points that form the NPC's path
+    public Animator anim;
     public Rigidbody2D rb;
 
-    public float idleTime = 4f; //The amount of time the NPC has to wait before it goes to it's next path
+    public float idleTime = 5f; //The amount of time the NPC has to wait before it goes to it's next path
     public float npcSpeed = 5f;
-
+    
+    readonly string[] IdleAnimations = { "Up", "Down", "Right", "Left" };
+    Vector2 direction;
     int nextWayPoint;
     int currentWayPoint = 0;
     float distance;
+    float animTime = 0f;
     float idleTimeReduce; //A variable to which idleTime will be assigned so that you cannot see the idleTime keep changing in the Unity Inspector
 
     private void Start()
@@ -21,16 +25,34 @@ public class NpcMovement : MonoBehaviour
         idleTimeReduce = idleTime;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        distance = Vector2.Distance(transform.position, Waypoints[currentWayPoint].position);
+        
+        distance = Vector2.Distance(rb.position, Waypoints[currentWayPoint].position);
+        Debug.Log(distance);
 
-        if (distance <= 0f)
+        if (distance <= 0.1f)
         {
+            anim.SetBool("Moving", false);
             idleTimeReduce -= Time.deltaTime;
+            animTime -= Time.deltaTime;
+
+            anim.SetFloat("Horizontal", 0f);
+            anim.SetFloat("Vertical", 0f);
+
+            if (animTime <= 0f)
+            {
+                anim.Play("Trent_Idle_" + IdleAnimations[Random.Range(0, IdleAnimations.Length)]);
+                animTime = 2f;
+            }
         }
         else
         {
+            direction = (Waypoints[currentWayPoint].position - transform.position);
+            Debug.Log(transform.position + " " + currentWayPoint + " " + Waypoints[currentWayPoint].position + " "+ direction.y);
+            anim.SetBool("Moving", true);
+            anim.SetFloat("Horizontal", direction.x);
+            anim.SetFloat("Vertical", direction.y);
             transform.position = Vector2.MoveTowards(transform.position, Waypoints[currentWayPoint].position, npcSpeed * Time.deltaTime);
         }
 
@@ -52,4 +74,6 @@ public class NpcMovement : MonoBehaviour
             idleTimeReduce = idleTime;
         }
     }
+
+   
 }
