@@ -55,6 +55,8 @@ public class DialogueManager : MonoBehaviour
         {
             sentences.Enqueue(sentence);
         }
+
+        NextDialogue();
     }
 
     public void NextDialogue()
@@ -83,7 +85,9 @@ public class DialogueManager : MonoBehaviour
 
     public void EndDialogue()
     {
+        
         canvas.enabled = false;
+        Debug.Log(canvas.enabled);
 
         FindObjectOfType<NpcMovement>().canMove = true;
         FindObjectOfType<PlayerMovement>().canMove = true;

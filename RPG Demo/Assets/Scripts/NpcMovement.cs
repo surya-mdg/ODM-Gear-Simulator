@@ -34,6 +34,7 @@ public class NpcMovement : MonoBehaviour
     {
         if (canMove)
         {
+            anim.SetBool("Chatting", false);
             distance = Vector2.Distance(rb.position, Waypoints[currentWayPoint].position);
 
             if (distance <= 0.1f)
@@ -80,22 +81,10 @@ public class NpcMovement : MonoBehaviour
         }
         else
         {
-            if (this.transform.position.x > player.transform.position.x)
-            {
-
-            }
-            else if(this.transform.position.x < player.transform.position.x)
-            {
-
-            }
-            else if (this.transform.position.x > player.transform.position.x)
-            {
-
-            }
-            else if (this.transform.position.x > player.transform.position.x)
-            {
-
-            }
+            direction = (player.transform.position - transform.position);
+            anim.SetBool("Chatting", true);
+            anim.SetFloat("Horizontal", direction.x);
+            anim.SetFloat("Vertical", direction.y);
         }
     }
 }
