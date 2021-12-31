@@ -30,5 +30,9 @@ public class PlayerMovement : MonoBehaviour
             animator.SetFloat("Vertical", movement.y);
             animator.SetFloat("Speed", movement.magnitude);
         }
+        else
+        {
+            animator.SetFloat("Speed", 0f);
+        }
     }
 }

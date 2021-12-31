@@ -33,7 +33,6 @@ public class DialogueTrigger : MonoBehaviour
         {
             if (Input.GetButtonDown("Jump"))
             {
-                Debug.Log("Ok");
                 FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
             }
         }

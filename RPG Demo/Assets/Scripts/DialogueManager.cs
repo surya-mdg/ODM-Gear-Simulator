@@ -87,10 +87,15 @@ public class DialogueManager : MonoBehaviour
     {
         
         canvas.enabled = false;
-        Debug.Log(canvas.enabled);
 
         FindObjectOfType<NpcMovement>().canMove = true;
         FindObjectOfType<PlayerMovement>().canMove = true;
+        StartCoroutine("Delay");
+    }
+
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(0.05f);
         FindObjectOfType<DialogueTrigger>().isChatting = false;
     }
 }
