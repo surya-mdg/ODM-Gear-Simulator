@@ -8,10 +8,12 @@ public class EnemyMovement : MonoBehaviour
     public Transform target;
     public float targetNearbyDistance = 5f;
     public float speed=400f;
+    public Animator animator;
 
     int currentWaypoint;
     float nextWaypointDistance = 0.5f;
     bool isNear = false;
+    bool isMoving = false;
 
     Seeker seeker;
     Rigidbody2D rb;
@@ -32,10 +34,12 @@ public class EnemyMovement : MonoBehaviour
         if (distance <= targetNearbyDistance)
         {
             isNear = true;
+            animator.SetBool("Moving", true);
         }
         else
         {
             isNear = false;
+            animator.SetBool("Moving", false);
         }
     }
     void CreatePath()
@@ -67,8 +71,12 @@ public class EnemyMovement : MonoBehaviour
             }
 
             Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
+            Vector2 animDirection = ((Vector2)target.position - rb.position).normalized;
             Vector2 force = direction * speed * Time.deltaTime;
             rb.AddForce(force);
+
+            animator.SetFloat("Horizontal", animDirection.x);
+            animator.SetFloat("Vertical", animDirection.y);
 
             float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
 
