@@ -59,6 +59,7 @@ public class NpcMovement : MonoBehaviour
                 anim.SetFloat("Horizontal", direction.x);
                 anim.SetFloat("Vertical", direction.y);
                 transform.position = Vector2.MoveTowards(transform.position, Waypoints[currentWayPoint].position, npcSpeed * Time.deltaTime);
+                
             }
 
             if (idleTimeReduce < 0f) //Chooses a ramdom point to move towards

@@ -13,7 +13,6 @@ public class EnemyMovement : MonoBehaviour
     int currentWaypoint;
     float nextWaypointDistance = 0.5f;
     bool isNear = false;
-    bool isMoving = false;
 
     Seeker seeker;
     Rigidbody2D rb;
@@ -33,6 +32,7 @@ public class EnemyMovement : MonoBehaviour
 
         if (distance <= targetNearbyDistance)
         {
+            
             isNear = true;
             animator.SetBool("Moving", true);
         }
@@ -44,8 +44,10 @@ public class EnemyMovement : MonoBehaviour
     }
     void CreatePath()
     {
-        if(isNear)
+        if (isNear)
+            AstarPath.active.Scan();
             seeker.StartPath(rb.position, target.position, OnPathComplete);
+
     }
 
     void OnPathComplete(Path p)
@@ -62,6 +64,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (isNear)
         {
+
             if (path == null)
                 return;
 
