@@ -575,7 +575,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0e18bdeae924b549a051c30838fe243, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slider: {fileID: 0}
+  slider: {fileID: 428087311}
   gradient:
     serializedVersion: 2
     key0: {r: 1, g: 0, b: 0, a: 1}
@@ -586,8 +586,8 @@ MonoBehaviour:
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 12143
-    ctime1: 34117
+    ctime0: 17540
+    ctime1: 39514
     ctime2: 65535
     ctime3: 0
     ctime4: 0
@@ -605,7 +605,7 @@ MonoBehaviour:
     m_Mode: 1
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
-  fill: {fileID: 0}
+  fill: {fileID: 155497485}
 --- !u!1 &462720957
 GameObject:
   m_ObjectHideFlags: 0
@@ -1229,6 +1229,7 @@ GameObject:
   - component: {fileID: 924116862}
   - component: {fileID: 924116861}
   - component: {fileID: 924116857}
+  - component: {fileID: 924116863}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1383,6 +1384,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.96, y: 1.49}
   m_EdgeRadius: 0
+--- !u!114 &924116863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924116856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e672ae249633d24e9530ef4ea93b186, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHealth: 100
+  damageTimeRate: 4
+  enemyDamage: 20
+  hb: {fileID: 428087312}
 --- !u!1 &970446324
 GameObject:
   m_ObjectHideFlags: 0
@@ -1588,7 +1605,7 @@ GameObject:
   - component: {fileID: 1367754287}
   - component: {fileID: 1367754286}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Dialogue System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1765,7 +1782,7 @@ GameObject:
   - component: {fileID: 1596989043}
   - component: {fileID: 1596989042}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: Health Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
