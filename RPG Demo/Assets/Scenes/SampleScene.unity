@@ -1448,6 +1448,7 @@ MonoBehaviour:
   enemyList:
     serializedVersion: 2
     m_Bits: 64
+  anim: {fileID: 924116861}
   attackRange: 3.61
   attackImpact: 1000
   attackRate: 0

@@ -6,6 +6,7 @@ public class PlayerAttack : MonoBehaviour
 {
     public Transform attackPoint;
     public LayerMask enemyList;
+    public Animator anim;
     public float attackRange = 0.5f;
     public float attackImpact = 20f;
     public float attackRate = 2f;
@@ -35,6 +36,10 @@ public class PlayerAttack : MonoBehaviour
             Vector2 direction = (enemy.transform.position - this.transform.position).normalized;
             Vector2 force = direction * attackImpact * Time.deltaTime;
             enemy.GetComponent<EnemyHealth>().TakeDamage(force);
+
+            anim.SetFloat("Attack_Horizontal", direction.x);
+            anim.SetFloat("Attack_Vertical", direction.y);
+            anim.SetTrigger("Attack");
         }
     }
 
