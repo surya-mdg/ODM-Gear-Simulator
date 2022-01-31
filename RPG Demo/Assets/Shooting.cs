@@ -22,5 +22,6 @@ public class Shooting : MonoBehaviour
         Transform bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
         rb.AddForce(firePoint.right * bulletSpeed, ForceMode2D.Impulse);
+        Destroy(bullet.gameObject, 5f);
     }
 }

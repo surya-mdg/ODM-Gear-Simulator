@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     public Rigidbody2D rb;
     public Animator animator;
     public Camera cam;
+    public Texture2D cursorAim;
 
     public float moveSpeed = 5f;
 
@@ -17,6 +18,12 @@ public class PlayerMovement : MonoBehaviour
     Vector2 movement;
     bool activateAim = false;
 
+    private void ChangeCursor(Texture2D cursor)
+    {
+        Vector2 hotspot = new Vector2(cursor.width / 2, cursor.height / 2);
+        Cursor.SetCursor(cursor, hotspot, CursorMode.Auto);
+    }
+
     private void Update()
     {
         movement.x = Input.GetAxisRaw("Horizontal");
@@ -26,11 +33,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetButtonDown("Fire2"))
         {
+            ChangeCursor(cursorAim);
+            
             activateAim = true;
         }
 
         if (Input.GetButtonUp("Fire2"))
         {
+            rb.rotation = 0f;
             activateAim = false;
         }
     }
@@ -51,8 +61,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 rb.MovePosition(rb.position + ((moveSpeed/2) * Time.fixedDeltaTime * movement));
 
-                Vector2 lookdir = mousePos - rb.position;
-                float angle = Mathf.Atan2(lookdir.x, lookdir.y) * Mathf.Rad2Deg;
+                Vector2 lookdir = (mousePos - rb.position);
+                float angle = Mathf.Atan2(lookdir.x, -lookdir.y) * Mathf.Rad2Deg;
                 rb.rotation = angle;
             }
         }

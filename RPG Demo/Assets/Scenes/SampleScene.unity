@@ -1284,6 +1284,7 @@ MonoBehaviour:
   rb: {fileID: 924116860}
   animator: {fileID: 924116861}
   cam: {fileID: 519420031}
+  cursorAim: {fileID: 2800000, guid: 11d23ffadaf83544ba8bb16da414b407, type: 3}
   moveSpeed: 5
   canMove: 1
 --- !u!212 &924116858
@@ -1468,7 +1469,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 3167999375819200251, guid: b2d76d5609a54f94d98c557a9bb4d168, type: 3}
   firePoint: {fileID: 86238486}
-  bulletSpeed: 50
+  bulletSpeed: 300
 --- !u!1 &970446324
 GameObject:
   m_ObjectHideFlags: 0
