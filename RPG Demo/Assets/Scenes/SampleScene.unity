@@ -1285,6 +1285,8 @@ MonoBehaviour:
   animator: {fileID: 924116861}
   cam: {fileID: 519420031}
   cursorAim: {fileID: 2800000, guid: 11d23ffadaf83544ba8bb16da414b407, type: 3}
+  cursorDefault: {fileID: 2800000, guid: 99dcfc6fa1226a34e8078e6b2f51b107, type: 3}
+  shoot: {fileID: 924116865}
   moveSpeed: 5
   canMove: 1
 --- !u!212 &924116858
@@ -1365,7 +1367,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.1
+  m_Mass: 0.2
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
@@ -1453,7 +1455,7 @@ MonoBehaviour:
     m_Bits: 64
   anim: {fileID: 924116861}
   attackRange: 3.61
-  attackImpact: 1000
+  attackImpact: 30
   attackRate: 0
 --- !u!114 &924116865
 MonoBehaviour:
@@ -1505,7 +1507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 924116859}
   targetNearbyDistance: 10
-  speed: 50
+  speed: 55
   animator: {fileID: 775982476}
 --- !u!50 &970446326
 Rigidbody2D:
@@ -1519,7 +1521,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.1
+  m_Mass: 0.2
   m_LinearDrag: 1
   m_AngularDrag: 0.05
   m_GravityScale: 0

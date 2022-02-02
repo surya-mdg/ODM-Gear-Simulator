@@ -9,15 +9,7 @@ public class Shooting : MonoBehaviour
 
     public float bulletSpeed = 0.1f;
 
-    private void Update()
-    {
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Shoot();
-        }
-    }
-
-    void Shoot()
+    public void Shoot()
     {
         Transform bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();

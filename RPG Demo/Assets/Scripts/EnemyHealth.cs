@@ -31,7 +31,7 @@ public class EnemyHealth : MonoBehaviour
         sr.color = Color.red;
         Debug.Log("Hit");
         hitCount++;
-        rb.AddForce(force);
+        rb.AddForce(force, ForceMode2D.Impulse);
         if (hitCount >= maxHitCount)
         {
             Die();
