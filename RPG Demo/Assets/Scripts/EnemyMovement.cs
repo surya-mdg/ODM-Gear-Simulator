@@ -5,10 +5,11 @@ using Pathfinding;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public Transform target;
     public float targetNearbyDistance = 5f;
     public float speed=400f;
     public Animator animator;
+
+    private GameObject target;
 
     int currentWaypoint;
     float nextWaypointDistance = 0.5f;
@@ -22,13 +23,13 @@ public class EnemyMovement : MonoBehaviour
     {
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
-        //seeker.StartPath(rb.position, target.position, OnPathComplete);
+        target = GameObject.FindGameObjectWithTag("Player");
         InvokeRepeating("CreatePath", 0f, 0.5f);
     }
 
     private void Update()
     {
-        float distance = Vector2.Distance(rb.position, target.position);
+        float distance = Vector2.Distance(rb.position, target.transform.position);
 
         if (distance <= targetNearbyDistance)
         {
@@ -46,7 +47,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (isNear)
             AstarPath.active.Scan();
-            seeker.StartPath(rb.position, target.position, OnPathComplete);
+            seeker.StartPath(rb.position, target.transform.position, OnPathComplete);
 
     }
 
@@ -74,7 +75,7 @@ public class EnemyMovement : MonoBehaviour
             }
 
             Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
-            Vector2 animDirection = ((Vector2)target.position - rb.position).normalized;
+            Vector2 animDirection = ((Vector2)target.transform.position - rb.position).normalized;
             Vector2 force = direction * speed * Time.deltaTime;
             rb.AddForce(force);
 

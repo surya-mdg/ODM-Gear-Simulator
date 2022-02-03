@@ -10,12 +10,18 @@ public class PlayerDamage : MonoBehaviour
 
     public HealthBar hb;
 
+    private GameObject gm;
+
+    float currentPlayerHealth;
     float timeCounter = 0f;
     bool isColliding = false;
 
     private void Start()
     {
+        gm = GameObject.FindGameObjectWithTag("Game Manager");
+
         hb.MaxHealth(playerHealth);
+        currentPlayerHealth = playerHealth;
     }
 
     private void Update()
@@ -24,8 +30,20 @@ public class PlayerDamage : MonoBehaviour
         if ((timeCounter <= 0f) && (isColliding))
         {
             hb.ReduceHealth(enemyDamage);
+            currentPlayerHealth -= enemyDamage;
             timeCounter = damageTimeRate;
         }
+
+        if (currentPlayerHealth <= 0f)
+        {
+            gm.GetComponent<GameMaster>().Kill(this.gameObject);
+        }
+    }
+
+    public void Respawn()
+    {
+        hb.MaxHealth(playerHealth);
+        currentPlayerHealth = playerHealth;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

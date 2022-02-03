@@ -7,12 +7,15 @@ public class EnemyHealth : MonoBehaviour
     public int maxHitCount = 3;
     public SpriteRenderer sr;
 
+    private GameObject gm;
+
     Rigidbody2D rb;
     int hitCount = 0;
     float colorTime = 0f;
 
     private void Start()
     {
+        gm = GameObject.FindGameObjectWithTag("Game Manager");
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -41,5 +44,6 @@ public class EnemyHealth : MonoBehaviour
     void Die()
     {
         Debug.Log("Dead");
+        gm.GetComponent<GameMaster>().Kill(this.gameObject);
     }
 }
