@@ -8,6 +8,7 @@ public class GameMaster : MonoBehaviour
     public Transform player;
     public Transform enemySpawnPoint;
     public Transform playerSpawnPoint;
+    public Camera cam;
 
     public void Kill(GameObject body)
     {
@@ -32,6 +33,7 @@ public class GameMaster : MonoBehaviour
             player.transform.position = playerSpawnPoint.position;
             player.GetComponent<PlayerDamage>().Respawn();
             player.gameObject.SetActive(true);
+            cam.transform.position = new Vector3(0, 0, -10);
         }
         else
         {
