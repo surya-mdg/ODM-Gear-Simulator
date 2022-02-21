@@ -1,2 +1,2 @@
-# RPG-Demo-Game
-This project is for a RPG game that I will be working on for learning Unity.
+# Game-Projects
+This repositary is for all the game projects that I will be creating using Unity.
