@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    Camera cam;
+    [SerializeField] Transform cam;
+    [SerializeField] Transform orientation;
+    public WallRun wallRun;
 
-    public float xSensitivity = 1f;
-    public float ySensitivity = 1f;
+    [SerializeField] float xSensitivity = 1f;
+    [SerializeField] float ySensitivity = 1f;
 
     float multiplier = 0.01f;
 
@@ -18,8 +20,6 @@ public class CameraMovement : MonoBehaviour
 
     private void Awake()
     {
-        cam = GetComponentInChildren<Camera>();
-
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -28,8 +28,8 @@ public class CameraMovement : MonoBehaviour
     {
         CursorTracker();
 
-        cam.transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-        transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
+        cam.transform.localRotation = Quaternion.Euler(xRotation, yRotation, wallRun.tilt);
+        orientation.transform.rotation = Quaternion.Euler(0f, yRotation, 0f);
     }
 
     void CursorTracker()
