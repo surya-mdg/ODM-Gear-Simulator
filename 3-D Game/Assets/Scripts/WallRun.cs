@@ -13,6 +13,7 @@ public class WallRun : MonoBehaviour
     [SerializeField] float wallCheckDistance = 1f;
     [SerializeField] float minJumpHeight = 1.5f;
     [SerializeField] float wallRunJumpForce = 10f;
+    [SerializeField] LayerMask Ground;
 
     [Header("Camera Settings")]
     [SerializeField] new Camera camera;
@@ -23,6 +24,7 @@ public class WallRun : MonoBehaviour
     [SerializeField] float camTiltTime;
 
     [HideInInspector] public float tilt { get; private set; }
+    [HideInInspector] public bool isWallRunning { get; private set; }
 
     bool checkWallLeft = false;
     bool checkWallRight = false;
@@ -33,6 +35,7 @@ public class WallRun : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        isWallRunning = false;
     }
 
     private void Update()
@@ -54,22 +57,27 @@ public class WallRun : MonoBehaviour
                 StopWallRun();
             }
         }
+        else
+        {
+            StopWallRun();
+        }
         
     }
 
     private void CheckWall()
     {
-        checkWallLeft = Physics.Raycast(transform.position, -Orientation.right, out leftWallHit, wallCheckDistance);
-        checkWallRight = Physics.Raycast(transform.position, Orientation.right, out rightWallHit, wallCheckDistance);
+        checkWallLeft = Physics.Raycast(transform.position, -Orientation.right, out leftWallHit, wallCheckDistance, Ground);
+        checkWallRight = Physics.Raycast(transform.position, Orientation.right, out rightWallHit, wallCheckDistance, Ground);
     }
 
     private bool CanWallRun()
     {
-        return !Physics.Raycast(transform.position, Vector3.down, minJumpHeight);
+        return !Physics.Raycast(transform.position, Vector3.down, minJumpHeight, Ground);
     }
 
     private void StartWallRun()
     {
+        isWallRunning = true;
         rb.useGravity = false;
         rb.AddForce(Vector3.down * wallRunGravity, ForceMode.Force);
 
@@ -79,29 +87,34 @@ public class WallRun : MonoBehaviour
         {
             tilt = Mathf.Lerp(tilt, -camTilt, camTiltTime * Time.deltaTime);
         }
-        else
+        else if(checkWallRight)
         {
             tilt = Mathf.Lerp(tilt, camTilt, camTiltTime * Time.deltaTime);
         }
 
-        if (checkWallLeft && Input.GetKey(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            Vector3 wallRunForce = transform.up + leftWallHit.normal;
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            rb.AddForce(wallRunForce * wallRunJumpForce * 100f , ForceMode.Force);
-        }
-        else if (checkWallRight && Input.GetKey(KeyCode.Space))
-        {
-            Vector3 wallRunForce = transform.up + rightWallHit.normal;
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-            rb.AddForce(wallRunForce * wallRunJumpForce * 100f, ForceMode.Force);
+            if (checkWallLeft)
+            {
+                Vector3 wallRunForce = transform.up + leftWallHit.normal;
+                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                rb.AddForce(wallRunForce * wallRunJumpForce * 100f, ForceMode.Force);
+            }
+            else if (checkWallRight)
+            {
+                Vector3 wallRunForce = transform.up + rightWallHit.normal;
+                rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
+                rb.AddForce(wallRunForce * wallRunJumpForce * 100f, ForceMode.Force);
+            }
         }
     }
 
     private void StopWallRun()
     {
+        isWallRunning = false;
         rb.useGravity = true;
         camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, fov, wallRunFovTime * Time.deltaTime);
         tilt = Mathf.Lerp(tilt, 0, camTiltTime * Time.deltaTime);
+        //tilt = 0;
     }
 }
