@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] Transform orientation;
     [SerializeField] new Camera camera;
-    [SerializeField] WallRun wallRun;
+    [SerializeField] public WallRun wallRun;
 
     [Header("Movement")]
     [SerializeField] float walkSpeed = 6f;
@@ -17,36 +15,34 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float airDrag = 0.4f;
     [SerializeField] float counterForce;
 
-
-    Vector3 counterDirection;
     Vector3 direction;
     Vector3 slopeDirection;
     float moveSpeed;
     float moveHorizontal;
     float moveVertical;
-    float counterHorizontal;
-    float counterVertical;
 
     [Header("Inputs")]
     [SerializeField] KeyCode jumpKey = KeyCode.Space;
     [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
 
-    Rigidbody rb;
+    
 
     [Header("Ground Detection")]
     [SerializeField] LayerMask Ground;
     [SerializeField] Transform groundDetection;
     [SerializeField] float jumpGravityMultiplier = 100f;
 
+    [HideInInspector] public bool isGrounded;
+    [HideInInspector] public bool isSprinting;
+    [HideInInspector] public Rigidbody rb;
+
     RaycastHit slopeHit;
     float groundCheckRadius = 0.1f;
-    bool isGrounded;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
-
         moveSpeed = walkSpeed;
     }
 
@@ -56,7 +52,6 @@ public class PlayerMovement : MonoBehaviour
         CheckSlope();    //Checks if the player is on a slope
         ControlSpeed();  //Controls speed of player
         Drag();          //Adds Drag to player depending on whether the player is in air or on ground
-        CounterMovement(); //Adds couner movement to make controls feel little sharp
 
         isGrounded = Physics.CheckSphere(groundDetection.position, groundCheckRadius, Ground);
 
@@ -87,40 +82,6 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void CounterMovement()
-    {
-        
-        if (direction.magnitude!=0)
-        {
-            counterDirection = direction;
-            
-        }
-        if (Input.GetKeyUp(KeyCode.A))
-        {
-            rb.AddForce(orientation.right * counterForce * counterDirection.magnitude, ForceMode.Impulse);
-            Debug.Log("X: " + rb.velocity.x + "   Z: " + rb.velocity.z+"    direction: "+counterDirection.magnitude);
-        }
-        else if (Input.GetKeyUp(KeyCode.D))
-        {
-            rb.AddForce(-orientation.right * counterForce * counterDirection.magnitude, ForceMode.Impulse);
-            Debug.Log("X: " + rb.velocity.x + "   Z: " + rb.velocity.z);
-        }
-
-        if (Input.GetKeyUp(KeyCode.W))
-        {
-            rb.AddForce(-orientation.forward * counterForce * counterDirection.magnitude, ForceMode.Impulse);
-            Debug.Log("X: " + rb.velocity.x + "   Z: " + rb.velocity.z);
-        }
-        else if (Input.GetKeyUp(KeyCode.S))
-        {
-            rb.AddForce(orientation.forward * counterForce * counterDirection.magnitude, ForceMode.Impulse);
-            Debug.Log("X: " + rb.velocity.x + "   Z: " + rb.velocity.z);
-        }
-
-
-
-    }
-
     private void CalculateWalk()
     {
         moveHorizontal = Input.GetAxisRaw("Horizontal");
@@ -134,10 +95,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Input.GetKey(sprintKey) && isGrounded)
         {
+            isSprinting = true;
             moveSpeed = Mathf.Lerp(moveSpeed, runSpeed, accelaration * Time.deltaTime);
         }
         else
         {
+            isSprinting = false;
             moveSpeed = Mathf.Lerp(moveSpeed, walkSpeed, accelaration * Time.deltaTime);
         }
     }
