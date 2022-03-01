@@ -11,6 +11,7 @@ public class HeadBob : MonoBehaviour
     [SerializeField, Range(0, 0.01f)] float breathAmplitude = 0.0005f;
 
     Transform _camera;
+    Transform weapon;
     PlayerMovement playerMove;
 
     private Vector3 startPosition;
@@ -19,9 +20,10 @@ public class HeadBob : MonoBehaviour
     private void Awake()
     {
         _camera = transform.Find("Main Camera");
+        weapon = transform.Find("Weapon Holder");
         playerMove = GameObject.Find("Player").GetComponent<PlayerMovement>();
 
-        startPosition = _camera.localPosition;
+        startPosition = weapon.localPosition;
         sprintFrequency = 1.5f * frequency;
     }
     
@@ -70,14 +72,14 @@ public class HeadBob : MonoBehaviour
 
     private void PlayMotion(Vector3 motion)
     {
-        _camera.localPosition += motion;
+        weapon.localPosition += motion;
     }
 
     private void ResetPosition()
     {
-        if (_camera.localPosition == startPosition) return;
+        if (weapon.localPosition == startPosition) return;
 
-        _camera.localPosition = Vector3.Lerp(_camera.localPosition, startPosition, 1 * Time.deltaTime);
+        weapon.localPosition = Vector3.Lerp(weapon.localPosition, startPosition, 1 * Time.deltaTime);
     }
 
     private Vector3 FocusAt()

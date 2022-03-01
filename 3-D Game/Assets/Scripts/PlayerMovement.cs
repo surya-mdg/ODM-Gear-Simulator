@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] Transform orientation;
-    [SerializeField] new Camera camera;
+    [SerializeField] new Transform camera;
     [SerializeField] public WallRun wallRun;
 
     [Header("Movement")]
@@ -24,8 +24,14 @@ public class PlayerMovement : MonoBehaviour
     [Header("Inputs")]
     [SerializeField] KeyCode jumpKey = KeyCode.Space;
     [SerializeField] KeyCode sprintKey = KeyCode.LeftShift;
-
     
+    //Jump Bob Prototype
+    bool transfer = false;
+    bool isSine = false;
+    float inter = 0f;
+    float lol;
+    Vector3 max;
+    Vector3 startPos;
 
     [Header("Ground Detection")]
     [SerializeField] LayerMask Ground;
@@ -39,11 +45,19 @@ public class PlayerMovement : MonoBehaviour
     RaycastHit slopeHit;
     float groundCheckRadius = 0.1f;
 
+    [SerializeField] bool enableJumpBob = false;
+    
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+
+        startPos = camera.localPosition;
         rb.freezeRotation = true;
         moveSpeed = walkSpeed;
+
+        //max = startPos - new Vector3(0f, 1f, 0f);
+        max = new Vector3(0f, 1f, 0f);
+        inter = startPos.y;
     }
 
     private void Update()
@@ -58,6 +72,31 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded && Input.GetKeyDown(jumpKey))
         {
             Jump();
+        }
+
+        if(transfer && isGrounded && enableJumpBob)
+        {
+            if (isSine)
+            {
+                camera.localPosition = Vector3.Lerp(camera.localPosition, max, inter);
+                inter -= 10f * Time.deltaTime;
+            }
+            else
+            {
+                camera.localPosition = Vector3.Lerp(camera.localPosition, startPos, inter);
+                inter += 10f * Time.deltaTime;
+                if (inter >= startPos.y)
+                {
+                    Debug.Log("inter value: " + inter + "  min value: " + startPos.y + "  Camera y position: " + camera.position.y);
+                    transfer = false;
+                }
+            }
+
+            if (inter <= max.y)
+            {
+                Debug.Log("inter value: " + inter + "  max value: " + max.y + "  Camera y position: " + camera.position.y);
+                isSine = false;
+            }
         }
     }
 
@@ -119,6 +158,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            isSine = true;
+            transfer = true;
             rb.drag = airDrag;
             if (!wallRun.isWallRunning)
             {
@@ -144,20 +185,5 @@ public class PlayerMovement : MonoBehaviour
         {
             return false;
         }
-    }
-
-    Vector2 FindVelRelativeToLook()
-    {
-        float lookAngle = orientation.transform.eulerAngles.y;
-        float moveAngle = Mathf.Atan2(rb.velocity.x, rb.velocity.z) * Mathf.Rad2Deg;
-
-        float u = Mathf.DeltaAngle(lookAngle, moveAngle);
-        float v = 90 - u;
-
-        float magnitue = rb.velocity.magnitude;
-        float yMag = magnitue * Mathf.Cos(u * Mathf.Deg2Rad);
-        float xMag = magnitue * Mathf.Cos(v * Mathf.Deg2Rad);
-
-        return new Vector2(xMag, yMag);
     }
 }
