@@ -19,9 +19,14 @@ public class Gun : MonoBehaviour
         currentAmmo = gun.currentAmmo;
     }
 
+    private void OnDisable()
+    {
+        gun.reloading = false;
+    }
+
     private void StartReload()
     {
-        if (!gun.reloading)
+        if (!gun.reloading && this.gameObject.activeSelf)
         {
             StartCoroutine("Reload");
         }
