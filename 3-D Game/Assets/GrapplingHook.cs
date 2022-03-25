@@ -9,11 +9,16 @@ public class GrapplingHook : MonoBehaviour
     [SerializeField] private Transform player;
     [SerializeField] private Transform grappleShootPoint;
     [SerializeField] private float maxDistance = 100f;
+    [SerializeField] private float grappleAngle = 2f;
+    [SerializeField] private bool shootLeft = false;
+    [SerializeField] private bool shootRight = false;
 
     private SpringJoint joint;
     private LineRenderer lr;
     private Vector3 grapplePoint;
     private Vector3 currentGrapplePosition;
+    private bool grappleStatus = false;
+    private RaycastHit hit;
 
     private void Start()
     {
@@ -40,8 +45,16 @@ public class GrapplingHook : MonoBehaviour
 
     void StartGrapple()
     {
-        RaycastHit hit;
-        if(Physics.Raycast(cam.position,cam.forward,out hit, maxDistance, grappleableLayers))
+        if (shootRight)
+        {
+            grappleStatus = Physics.Raycast(cam.position, cam.forward + (cam.right / grappleAngle), out hit, maxDistance, grappleableLayers);
+        }
+        else if(shootLeft)
+        {
+            grappleStatus = Physics.Raycast(cam.position, cam.forward + (-cam.right / grappleAngle), out hit, maxDistance, grappleableLayers);
+        }
+
+        if(grappleStatus)
         {
             grapplePoint = hit.point;
             joint = player.gameObject.AddComponent<SpringJoint>();
