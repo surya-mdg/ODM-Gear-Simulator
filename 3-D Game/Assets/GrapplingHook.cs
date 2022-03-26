@@ -8,6 +8,7 @@ public class GrapplingHook : MonoBehaviour
     [SerializeField] private Transform cam;
     [SerializeField] private Transform player;
     [SerializeField] private Transform grappleShootPoint;
+    [SerializeField] private Transform grappleCrosshair;
     [SerializeField] private float maxDistance = 100f;
     [SerializeField] private float grappleAngle = 2f;
     [SerializeField] private bool shootLeft = false;
@@ -15,10 +16,12 @@ public class GrapplingHook : MonoBehaviour
 
     private SpringJoint joint;
     private LineRenderer lr;
+    private RaycastHit hit;
     private Vector3 grapplePoint;
     private Vector3 currentGrapplePosition;
     private bool grappleStatus = false;
-    private RaycastHit hit;
+    private bool grappling = false;
+    public float scrollFactor = 2f;
 
     private void Start()
     {
@@ -27,15 +30,27 @@ public class GrapplingHook : MonoBehaviour
 
     void Update()
     {
+        grappleAngle += Input.mouseScrollDelta.y * scrollFactor;
+        grappleAngle = Mathf.Clamp(grappleAngle, 2f, 28f);
+
         if (Input.GetMouseButtonDown(0))
         {
+            grappling = true;
             StartGrapple();
         }
 
         if (Input.GetMouseButtonUp(0))
         {
             StopGrapple();
+            grappling = false;
         }
+
+        if (!grappling)
+        {
+            CalculateCrosshair();
+        }
+
+        UpdateCrosshair();
     }
 
     private void LateUpdate()
@@ -89,5 +104,36 @@ public class GrapplingHook : MonoBehaviour
 
         lr.SetPosition(0, grappleShootPoint.position);
         lr.SetPosition(1, currentGrapplePosition);
+    }
+
+    private void UpdateCrosshair()
+    {
+        if (!grappleStatus)
+        {
+            RectTransform trans= grappleCrosshair.GetComponent<RectTransform>();
+            trans.anchoredPosition = new Vector3(0, 0, 0);
+        }
+        else
+        {
+            grappleCrosshair.position = Camera.main.WorldToScreenPoint(grapplePoint);
+        }
+    }
+
+    private void CalculateCrosshair()
+    {
+        if (shootRight)
+        {
+            grappleStatus = Physics.Raycast(cam.position, cam.forward + (cam.right / grappleAngle), out hit, maxDistance, grappleableLayers);
+        }
+        else if (shootLeft)
+        {
+            grappleStatus = Physics.Raycast(cam.position, cam.forward + (-cam.right / grappleAngle), out hit, maxDistance, grappleableLayers);
+        }
+
+        if (grappleStatus)
+        {
+            Debug.Log("Working");
+            grapplePoint = hit.point;
+        }
     }
 }
