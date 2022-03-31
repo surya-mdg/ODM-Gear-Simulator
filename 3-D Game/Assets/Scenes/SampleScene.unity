@@ -409,7 +409,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 285339003}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.237, y: -0.339, z: -0.23}
+  m_LocalPosition: {x: -0.24, y: -0.17, z: 0.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1487775957}
@@ -429,6 +429,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootLeft: 0
   shootRight: 1
+  attached: 0
 --- !u!120 &285339006
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -1598,7 +1599,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 927427037}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.742, y: -0.343, z: -0.23}
+  m_LocalPosition: {x: 0.74, y: -0.17, z: 0.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1487775957}
@@ -1618,6 +1619,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shootLeft: 1
   shootRight: 0
+  attached: 0
 --- !u!120 &927427040
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -2194,7 +2196,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &1405891694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3110,3 +3112,5 @@ MonoBehaviour:
   maxDistance: 150
   grappleAngle: 10
   scrollFactor: 1
+  minDistance: 0.05
+  grappleForce: 80

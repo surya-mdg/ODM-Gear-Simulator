@@ -11,10 +11,11 @@ public class GrapplingHook : MonoBehaviour
     private SpringJoint joint;
     private LineRenderer lr;
     private RaycastHit hit;
-    private Vector3 grapplePoint;
+    public Vector3 grapplePoint { get; private set; }
     private Vector3 currentGrapplePosition;
     private bool grappleStatus = false;
     private bool grappling = false;
+    public bool attached = false;
 
     private void Start()
     {
@@ -37,6 +38,20 @@ public class GrapplingHook : MonoBehaviour
         {
             StopGrapple();
             grappling = false;
+            attached = false;
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            grappling = true;
+            StartGrapplePush();
+        }
+
+        if (Input.GetMouseButtonUp(1))
+        {
+            StopGrapple();
+            grappling = false;
+            attached = false;
         }
 
         if (!grappling)
@@ -74,7 +89,7 @@ public class GrapplingHook : MonoBehaviour
             float distanceFromGrapple = Vector3.Distance(grapplePoint, gs.player.position);
 
             joint.maxDistance = distanceFromGrapple * 0.8f;
-            joint.minDistance = distanceFromGrapple * 0.25f;
+            joint.minDistance = distanceFromGrapple * gs.minDistance;
 
             joint.spring = 4.5f;
             joint.damper = 7f;
@@ -95,12 +110,47 @@ public class GrapplingHook : MonoBehaviour
     void StopGrapple()
     {
         lr.positionCount = 0;
-        Destroy(joint);
+        if (joint != null)
+        {
+            Destroy(joint);
+        }
+    }
+
+    void StartGrapplePush()
+    {
+        if (shootRight)
+        {
+            grappleStatus = Physics.Raycast(gs.cam.position, gs.cam.forward + (gs.cam.right / gs.grappleAngle), out hit, gs.maxDistance, gs.grappleableLayers);
+        }
+        else if (shootLeft)
+        {
+            grappleStatus = Physics.Raycast(gs.cam.position, gs.cam.forward + (-gs.cam.right / gs.grappleAngle), out hit, gs.maxDistance, gs.grappleableLayers);
+        }
+
+        if (grappleStatus)
+        {
+            attached = true;
+            grapplePoint = hit.point;
+            
+
+            float distanceFromGrapple = Vector3.Distance(grapplePoint, gs.player.position);
+
+
+            lr.positionCount = 2;
+            if (shootLeft)
+            {
+                currentGrapplePosition = gs.grappleShootPointLeft.position;
+            }
+            else
+            {
+                currentGrapplePosition = gs.grappleShootPointRight.position;
+            }
+        }
     }
 
     private void DrawGrapple()
     {
-        if (!joint) return;
+        if (!joint && !attached) return;
 
         currentGrapplePosition = Vector3.Lerp(currentGrapplePosition, grapplePoint, Time.deltaTime * 8f);
 
