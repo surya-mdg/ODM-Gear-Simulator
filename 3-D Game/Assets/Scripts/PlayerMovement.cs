@@ -5,6 +5,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Transform orientation;
     [SerializeField] new Transform camera;
     [SerializeField] public WallRun wallRun;
+    [SerializeField] private Animator animLeft;
+    [SerializeField] private Animator animRight;
 
     [Header("Movement")]
     [SerializeField] float walkSpeed = 6f;
@@ -126,19 +128,34 @@ public class PlayerMovement : MonoBehaviour
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         moveVertical = Input.GetAxisRaw("Vertical");
 
+        if ((moveHorizontal != 0 || moveVertical != 0) && !isSprinting)
+        {
+            animLeft.SetBool("Walk", true);
+            animRight.SetBool("Walk", true);
+        }
+        else
+        {
+            animLeft.SetBool("Walk", false);
+            animRight.SetBool("Walk", false);
+        }
+
         direction = orientation.forward * moveVertical + orientation.right * moveHorizontal;
         slopeDirection = Vector3.ProjectOnPlane(direction, slopeHit.normal);
     }
 
     private void ControlSpeed()
     {
-        if (Input.GetKey(sprintKey) && isGrounded)
+        if (Input.GetKey(sprintKey) && isGrounded && (moveHorizontal != 0 || moveVertical != 0))
         {
+            animLeft.SetBool("Sprint", true);
+            animRight.SetBool("Sprint", true);
             isSprinting = true;
             moveSpeed = Mathf.Lerp(moveSpeed, runSpeed, accelaration * Time.deltaTime);
         }
         else
         {
+            animLeft.SetBool("Sprint", false);
+            animRight.SetBool("Sprint", false);
             isSprinting = false;
             moveSpeed = Mathf.Lerp(moveSpeed, walkSpeed, accelaration * Time.deltaTime);
         }

@@ -15,6 +15,7 @@ public class GrapplingHook : MonoBehaviour
     private Vector3 currentGrapplePosition;
     private bool grappleStatus = false;
     private bool grappling = false;
+    public bool canGrapple = true;
     public bool attached = false;
 
     private void Start()
@@ -28,7 +29,7 @@ public class GrapplingHook : MonoBehaviour
         gs.grappleAngle += Input.mouseScrollDelta.y * gs.scrollFactor;
         gs.grappleAngle = Mathf.Clamp(gs.grappleAngle, 2f, 28f);
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && canGrapple)
         {
             grappling = true;
             StartGrapple();
@@ -41,7 +42,7 @@ public class GrapplingHook : MonoBehaviour
             attached = false;
         }
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && canGrapple)
         {
             grappling = true;
             StartGrapplePush();

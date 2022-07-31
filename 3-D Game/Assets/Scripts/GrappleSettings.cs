@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GrappleSettings : MonoBehaviour
 {
@@ -9,21 +10,37 @@ public class GrappleSettings : MonoBehaviour
     public Transform grappleCrosshairRight;
     public Transform grappleShootPointLeft;
     public Transform grappleShootPointRight;
+    public Slider slider;
     public float maxDistance = 100f;
     public float grappleAngle = 2f;
     public float scrollFactor = 2f;
     public float minDistance = 0.01f;
+    public float maxFuelTime = 1500f;
     [SerializeField] private float grappleForce = 100f;
 
     private GrapplingHook[] gh;
 
-    private void Start()
+    private void Awake()
     {
         gh = GetComponentsInChildren<GrapplingHook>();
+        slider.maxValue = maxFuelTime;
+        slider.value = maxFuelTime;
+        
     }
 
     private void Update()
     {
+        if(gh[0].attached || gh[1].attached)
+        {
+            slider.value -= Time.deltaTime;
+        }
+
+        if(slider.value<=0)
+        {
+            gh[0].canGrapple = false;
+            gh[1].canGrapple = false;
+        }
+
         if(gh[0].attached && gh[1].attached)
         {
             Vector3 mid = (gh[0].grapplePoint + gh[1].grapplePoint) / 2;
