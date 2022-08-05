@@ -39,8 +39,7 @@ public class PlayerCombat : MonoBehaviour
 
         if(hold)
         {
-            Debug.Log(rb.velocity.magnitude);
-            if(rb.velocity.magnitude>55f)
+            if(rb.velocity.magnitude>60f)
             {
                 Collider[] colliders = Physics.OverlapSphere(attackPoint.position, attackRadius);
                 foreach (Collider i in colliders)

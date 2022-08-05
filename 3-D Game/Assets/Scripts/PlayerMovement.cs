@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public WallRun wallRun;
     [SerializeField] private Animator animLeft;
     [SerializeField] private Animator animRight;
+    [SerializeField] private ParticleSystem speedlines;
 
     [Header("Movement")]
     [SerializeField] float walkSpeed = 6f;
@@ -31,26 +32,35 @@ public class PlayerMovement : MonoBehaviour
     bool transfer = false;
     bool isSine = false;
     float inter = 0f;
-    float lol;
     Vector3 max;
     Vector3 startPos;
 
     [Header("Ground Detection")]
     [SerializeField] LayerMask Ground;
     [SerializeField] Transform groundDetection;
-    [SerializeField] float jumpGravityMultiplier = 100f;
+    public float jumpGravityMultiplier = 100f;
 
     [HideInInspector] public bool isGrounded;
     [HideInInspector] public bool isSprinting;
     [HideInInspector] public Rigidbody rb;
 
+    [Header("Camera Settings")]
+    [SerializeField] Camera cameraMain;
+    [SerializeField] float fov;
+    [SerializeField] float fovIncrease;
+    [SerializeField] float fovTime;
+
     RaycastHit slopeHit;
-    float groundCheckRadius = 0.1f;
+    float groundCheckRadius = 0.5f;
+    float verticalFOV;
 
     [SerializeField] bool enableJumpBob = false;
     
     private void Awake()
     {
+        verticalFOV = Camera.HorizontalToVerticalFieldOfView(fov, cameraMain.aspect);
+        cameraMain.fieldOfView = verticalFOV;
+
         rb = GetComponent<Rigidbody>();
 
         startPos = camera.localPosition;
@@ -60,10 +70,23 @@ public class PlayerMovement : MonoBehaviour
         //max = startPos - new Vector3(0f, 1f, 0f);
         max = new Vector3(0f, 1f, 0f);
         inter = startPos.y;
+
+        speedlines.Stop();
     }
 
     private void Update()
     {
+        if (rb.velocity.magnitude >= 60f)
+        {
+            cameraMain.fieldOfView = Mathf.Lerp(cameraMain.fieldOfView, verticalFOV + Camera.HorizontalToVerticalFieldOfView(fovIncrease, cameraMain.aspect), fovTime * Time.deltaTime);
+            speedlines.Play();
+        }
+        else
+        {
+            speedlines.Stop();
+            cameraMain.fieldOfView = Mathf.Lerp(cameraMain.fieldOfView, verticalFOV, fovTime * Time.deltaTime);
+        }
+
         CalculateWalk(); //Calculated the direction in which the player should move
         CheckSlope();    //Checks if the player is on a slope
         ControlSpeed();  //Controls speed of player

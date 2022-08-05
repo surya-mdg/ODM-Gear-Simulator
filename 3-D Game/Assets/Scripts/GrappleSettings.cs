@@ -4,6 +4,7 @@ using UnityEngine.UI;
 public class GrappleSettings : MonoBehaviour
 {
     public LayerMask grappleableLayers;
+    public PlayerMovement pm;
     public Transform cam;
     public Transform player;
     public Transform grappleCrosshairLeft;
@@ -17,6 +18,16 @@ public class GrappleSettings : MonoBehaviour
     public float minDistance = 0.01f;
     public float maxFuelTime = 1500f;
     [SerializeField] private float grappleForce = 100f;
+    [SerializeField] private float gravity = 50f;
+
+    [Header("Camera Settings")]
+    [SerializeField] new Camera camera;
+    [SerializeField] float fov;
+    [SerializeField] float fovIncrease;
+    [SerializeField] float fovTime;
+
+    public Color aimColor;
+    public Color hideColor;
 
     private GrapplingHook[] gh;
 
@@ -33,6 +44,11 @@ public class GrappleSettings : MonoBehaviour
         if(gh[0].attached || gh[1].attached)
         {
             slider.value -= Time.deltaTime;
+            pm.jumpGravityMultiplier = 8f;
+        }
+        else
+        {
+            pm.jumpGravityMultiplier = gravity;
         }
 
         if(slider.value<=0)

@@ -1,6 +1,9 @@
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GrapplingHook : MonoBehaviour
 {
@@ -58,7 +61,7 @@ public class GrapplingHook : MonoBehaviour
         if (!grappling)
         {
             CalculateCrosshair();
-            
+
         }
 
         UpdateCrosshair();
@@ -75,12 +78,12 @@ public class GrapplingHook : MonoBehaviour
         {
             grappleStatus = Physics.Raycast(gs.cam.position, gs.cam.forward + (gs.cam.right / gs.grappleAngle), out hit, gs.maxDistance, gs.grappleableLayers);
         }
-        else if(shootLeft)
+        else if (shootLeft)
         {
             grappleStatus = Physics.Raycast(gs.cam.position, gs.cam.forward + (-gs.cam.right / gs.grappleAngle), out hit, gs.maxDistance, gs.grappleableLayers);
         }
 
-        if(grappleStatus)
+        if (grappleStatus)
         {
             grapplePoint = hit.point;
             joint = gs.player.gameObject.AddComponent<SpringJoint>();
@@ -132,7 +135,7 @@ public class GrapplingHook : MonoBehaviour
         {
             attached = true;
             grapplePoint = hit.point;
-            
+
 
             float distanceFromGrapple = Vector3.Distance(grapplePoint, gs.player.position);
 
@@ -172,21 +175,26 @@ public class GrapplingHook : MonoBehaviour
         {
             Vector3 direction = (grapplePoint - gs.player.position).normalized;
             float angle = Vector3.Angle(direction, gs.cam.forward);
+            Image img = gs.grappleCrosshairLeft.GetComponent<Image>();
             if (!grappleStatus)
             {
                 RectTransform trans = gs.grappleCrosshairLeft.GetComponent<RectTransform>();
                 trans.anchoredPosition = new Vector3(0, 0, 0);
+
+                img.color = gs.hideColor;
             }
             else
             {
                 if (angle > 90f)
                 {
+                    img.color = gs.hideColor;
                     RectTransform trans = gs.grappleCrosshairLeft.GetComponent<RectTransform>();
                     trans.anchoredPosition = new Vector3(0, 0, 0);
                 }
                 else
                 {
                     gs.grappleCrosshairLeft.position = Camera.main.WorldToScreenPoint(grapplePoint);
+                    img.color = gs.aimColor;
                 }
 
             }
@@ -195,21 +203,27 @@ public class GrapplingHook : MonoBehaviour
         {
             Vector3 direction = (grapplePoint - gs.player.position).normalized;
             float angle = Vector3.Angle(direction, gs.cam.forward);
+            Image img = gs.grappleCrosshairRight.GetComponent<Image>();
             if (!grappleStatus)
             {
                 RectTransform trans = gs.grappleCrosshairRight.GetComponent<RectTransform>();
                 trans.anchoredPosition = new Vector3(0, 0, 0);
+
+                img.color = gs.hideColor;
             }
             else
             {
                 if (angle > 90f)
                 {
+                    img.color = gs.hideColor;
                     RectTransform trans = gs.grappleCrosshairRight.GetComponent<RectTransform>();
                     trans.anchoredPosition = new Vector3(0, 0, 0);
+
                 }
                 else
                 {
                     gs.grappleCrosshairRight.position = Camera.main.WorldToScreenPoint(grapplePoint);
+                    img.color = gs.aimColor;
                 }
             }
         }
