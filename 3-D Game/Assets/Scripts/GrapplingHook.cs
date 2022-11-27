@@ -9,6 +9,8 @@ public class GrapplingHook : MonoBehaviour
 {
     [SerializeField] private bool shootLeft = false;
     [SerializeField] private bool shootRight = false;
+    [SerializeField] private GameObject rightIndicator;
+    [SerializeField] private GameObject leftIndicator;
 
     private GrappleSettings gs;
     private SpringJoint joint;
@@ -77,10 +79,12 @@ public class GrapplingHook : MonoBehaviour
         if (shootRight)
         {
             grappleStatus = Physics.Raycast(gs.cam.position, gs.cam.forward + (gs.cam.right / gs.grappleAngle), out hit, gs.maxDistance, gs.grappleableLayers);
+            rightIndicator.SetActive(grappleStatus);
         }
         else if (shootLeft)
         {
             grappleStatus = Physics.Raycast(gs.cam.position, gs.cam.forward + (-gs.cam.right / gs.grappleAngle), out hit, gs.maxDistance, gs.grappleableLayers);
+            leftIndicator.SetActive(grappleStatus);
         }
 
         if (grappleStatus)
@@ -125,10 +129,12 @@ public class GrapplingHook : MonoBehaviour
         if (shootRight)
         {
             grappleStatus = Physics.Raycast(gs.cam.position, gs.cam.forward + (gs.cam.right / gs.grappleAngle), out hit, gs.maxDistance, gs.grappleableLayers);
+            rightIndicator.SetActive(grappleStatus);
         }
         else if (shootLeft)
         {
             grappleStatus = Physics.Raycast(gs.cam.position, gs.cam.forward + (-gs.cam.right / gs.grappleAngle), out hit, gs.maxDistance, gs.grappleableLayers);
+            leftIndicator.SetActive(grappleStatus);
         }
 
         if (grappleStatus)
@@ -173,7 +179,7 @@ public class GrapplingHook : MonoBehaviour
     {
         if (shootLeft)
         {
-            Vector3 direction = (grapplePoint - gs.player.position).normalized;
+            Vector3 direction = (grapplePoint - gs.transform.position).normalized;
             float angle = Vector3.Angle(direction, gs.cam.forward);
             Image img = gs.grappleCrosshairLeft.GetComponent<Image>();
             if (!grappleStatus)
@@ -201,7 +207,7 @@ public class GrapplingHook : MonoBehaviour
         }
         else
         {
-            Vector3 direction = (grapplePoint - gs.player.position).normalized;
+            Vector3 direction = (grapplePoint - gs.transform.position).normalized;
             float angle = Vector3.Angle(direction, gs.cam.forward);
             Image img = gs.grappleCrosshairRight.GetComponent<Image>();
             if (!grappleStatus)
@@ -234,10 +240,12 @@ public class GrapplingHook : MonoBehaviour
         if (shootRight)
         {
             grappleStatus = Physics.Raycast(gs.cam.position, gs.cam.forward + (gs.cam.right / gs.grappleAngle), out hit, gs.maxDistance, gs.grappleableLayers);
+            rightIndicator.SetActive(grappleStatus);
         }
         else if (shootLeft)
         {
             grappleStatus = Physics.Raycast(gs.cam.position, gs.cam.forward + (-gs.cam.right / gs.grappleAngle), out hit, gs.maxDistance, gs.grappleableLayers);
+            leftIndicator.SetActive(grappleStatus);
         }
 
         if (grappleStatus)
